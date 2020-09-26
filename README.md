@@ -18,4 +18,7 @@ There are many approaches we can use to implement API versioning. In general, th
                 //Enabling this option, responses from our API endpoints inform which versions are supported or deprecated
                 options.ReportApiVersions = true;              
 
-            });
+     });
+     
+### options.DefaultApiVersion = new ApiVersion(1, 0);
+With DefaultApiVersion being set, all controllers that do not have an API version attribute ([ApiVersion("1.0")]) applied on them, will implicitly bound to this default API version.
