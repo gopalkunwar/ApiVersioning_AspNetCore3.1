@@ -31,4 +31,8 @@ Reporting API versions is disabled by default. With enabling this option, respon
 
 
 ## API versioning approach
+### API Version Reader
+API Version Reader defines how an API version is read from the HTTP request. If not explicitly configured, the default setting is that our API version will be a query string parameter named 'api-version'  (example: ../users?api-version=2.0 ). Another, probably more popular option is to store the API version in the HTTP header. We have also the possibility of having an API version both in a query string as well as in an HTTP header.
+
+
 
