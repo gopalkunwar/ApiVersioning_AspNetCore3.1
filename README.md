@@ -22,3 +22,13 @@ There are many approaches we can use to implement API versioning. In general, th
      
 ### options.DefaultApiVersion = new ApiVersion(1, 0);
 With DefaultApiVersion being set, all controllers that do not have an API version attribute ([ApiVersion("1.0")]) applied on them, will implicitly bound to this default API version.
+
+### options.AssumeDefaultVersionWhenUnspecified = true;
+DefaultApiVersion sets just the default API version, but we still need to set AssumeDefaultVersionWhenUnspecified to true for default API version to be activated.
+
+### options.ReportApiVersions = true;
+Reporting API versions is disabled by default. With enabling this option, responses from our API endpoints will carry a header telling our clients which versions are supported or deprecated (api-supported-versions: 1.1, 2.0, api-deprecated-versions: 1.0).
+
+
+## API versioning approach
+
