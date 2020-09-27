@@ -38,50 +38,34 @@ namespace API
                 options.DefaultApiVersion = new ApiVersion(1, 0);                
 
                 //Enabling this option, responses from our API endpoints inform which versions are supported or deprecated
-                options.ReportApiVersions = true;              
+                options.ReportApiVersions = true;
 
-            });
+                //Query String Parameter
+                //Changed parameter reading from "api-version" to "v"
+                //api/cars?v=1.2
+                //options.ApiVersionReader = new QueryStringApiVersionReader("v");
 
-            //VERSIONING Type
+                //Header Parameter
+                //api/cars
+                //In Header=>Set api-version=1.2
+                //options.ApiVersionReader = new HeaderApiVersionReader("api-version");
 
-            // 1. VERSIONING Via QUERY STRING PARAMETER
-            //Query string parameter is the default method, for that use a query string parameter named 'api-version'.
-            //The default setting is that API version will be a query string parameter named 'api-version' i.e. /cars?api-version=1.1
-            // To change query string parameter name of the default setting, We have used QueryStringApiVersionReader("v") i.e. /cars?v=1.1
-            // We have used the letter 'v' instead of default 'api-version').
-            //  services.AddApiVersioning(options =>
-            //       options.ApiVersionReader = new QueryStringApiVersionReader("v"));
+                //URL Path
+                //api/v1.1/cars
+                //Set [Route("api/v{version:apiVersion}/[controller]")] in Controller
+                //options.ApiVersionReader = new UrlSegmentApiVersionReader();
 
-            //2. VERSIONING Via HTTP HEADER
-            //This option allows to store the API version in the HTTP header
-            //  services.AddApiVersioning(options =>
-            //        options.ApiVersionReader = new HeaderApiVersionReader("api-version"));
+                //Media Type
+                //In Header=> Set Accept:application/json;v=1.1
+                //options.ApiVersionReader = new MediaTypeApiVersionReader("v");
 
-            //3. VERSIONING Via URL PATH
-            //To set the versioning our API with URL path segment, beside [ApiVersion(...)] attributes
-            //we also need to set the URL segment of the route where the API version will be read from
-            //[Route("api/v{version:apiVersion}/[controller]")]
-            //  services.AddApiVersioning(options =>
-            //        options.ApiVersionReader = new UrlSegmentApiVersionReader());
+                //Combination of Query String & Header
+                //Works both on api/v1.1/cars?v=1.1 OR
+                //In Header=> Set v=1.1
+                //options.ApiVersionReader = ApiVersionReader.Combine(new QueryStringApiVersionReader("v"),
+                //                                              new HeaderApiVersionReader("v"));
 
-            //4. API Version Reader Composition=>Combination of Query String and Header
-                 services.AddApiVersioning(options => {
-                        options.ApiVersionReader = ApiVersionReader.Combine(new QueryStringApiVersionReader("v"),
-                                                                             new HeaderApiVersionReader("v"));
-                    });
-
-            //5. API Version Via Convention
-            //api/values1?v=3.1
-                services.AddApiVersioning(options =>
-                {
-                    options.Conventions.Controller<Values1Controller>().HasApiVersion(3, 1);
-                });
-
-            //6. API Version Via Convention
-            //Setting deprecated API version as well as versioning controller actions
-                services.AddApiVersioning(options=>
-                {
-                    options.Conventions.Controller<Values2Controller>().HasDeprecatedApiVersion(3, 0)
+                options.Conventions.Controller<Values2Controller>().HasDeprecatedApiVersion(3, 0)
                                                                         //if we have two action without specifying the action to 
                                                                         // particular version will result error saying
                                                                         //AmbiguousMatchException: The request matched multiple endpoints. Matches;
@@ -92,18 +76,17 @@ namespace API
                                                                         .HasApiVersion(3, 3)
 
                                                                         ///api/values2?v=3.1
-                                                                        .Action(c => c.Get_31()).MapToApiVersion(3,1)
+                                                                        .Action(c => c.Get_31()).MapToApiVersion(3, 1)
 
                                                                         ///api/values2?v=3.2
                                                                         .Action(c => c.Get_32()).MapToApiVersion(3, 2);
 
+                //API Versioning via Custom Convention
+                //options.Conventions.Add(new ApiVersioning_CustomConvention());
 
-                    //API Versioning via Custom Convention
-                    //options.Conventions.Add(new ApiVersioning_CustomConvention());
-
-                    //API Versiong by namespace convention
-                    //options.Conventions.Add(new VersionByNamespaceConvention());
-                });
+                //API Versiong by namespace convention
+                //options.Conventions.Add(new VersionByNamespaceConvention());
+            });   
 
 
         }
