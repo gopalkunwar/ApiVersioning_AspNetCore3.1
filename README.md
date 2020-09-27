@@ -80,7 +80,7 @@ API Version Reader defines how an API version is read from the HTTP request. If 
     
    
     
-* To Set the URL segment of the route where the API version will be read, use [Route("api/v{version:apiVersion}/[controller]")] instead of [Route("api/[controller]")].
+* For URL Path Reader: Set the URL segment of the route where the API version will be read, use [Route("api/v{version:apiVersion}/[controller]")] instead of [Route("api/[controller]")].
 * Use [ApiVersion("1.0")] means it supports Api version 1.0.
 * Use [MapToApiVersion("2.0")] to support only for Api version 2.0.
 * Use [ApiVersion("1.0", Deprecated = true)] to deprecate some Api version.
