@@ -36,19 +36,52 @@ API Version Reader defines how an API version is read from the HTTP request. If 
 
 
 #### Query String Parameter 
-services.AddApiVersioning(options => 
-    options.ApiVersionReader = new QueryStringApiVersionReader("v"));
+    services.AddApiVersioning(options => 
+      options.ApiVersionReader = new QueryStringApiVersionReader("v"));
     
 #### HTTP Header
-services.AddApiVersioning(options => 
-    options.ApiVersionReader = new HeaderApiVersionReader("api-version"));
+    services.AddApiVersioning(options => 
+      options.ApiVersionReader = new HeaderApiVersionReader("api-version"));
     
 #### Composite Reader
-services.AddApiVersioning(options => {
-    options.ApiVersionReader = ApiVersionReader.Combine(
-        new QueryStringApiVersionReader("v"),
-        new HeaderApiVersionReader("v"));});
+    services.AddApiVersioning(options => {
+      options.ApiVersionReader = ApiVersionReader.Combine(
+          new QueryStringApiVersionReader("v"),
+          new HeaderApiVersionReader("v"));});
         
 #### URL Path Reader
-services.AddApiVersioning(options => options.ApiVersionReader = 
-    new UrlSegmentApiVersionReader());
+     services.AddApiVersioning(options => options.ApiVersionReader = 
+        new UrlSegmentApiVersionReader());
+    
+* To Set the URL segment of the route where the API version will be read, use [Route("api/v{version:apiVersion}/[controller]")] instead of [Route("api/[controller]")].
+* Use [ApiVersion("1.0")] means it supports Api version 1.0.
+* Use [MapToApiVersion("2.0")] to support only for Api version 2.0.
+* Use [ApiVersion("1.0", Deprecated = true)] to deprecate some Api version.
+
+
+## API Versioning Via Convention
+      services.AddApiVersioning( options =>
+      {
+          options.Conventions.Controller<ValueController>().HasApiVersion(1, 0);
+      });
+  
+ To set deprecated Api version as well as versioning controller actions
+ 
+      services.AddApiVersioning( options =>
+        {
+              options.Conventions.Controller<MyController>()	   
+                                 .HasDeprecatedApiVersion(1, 0)
+                                 .HasApiVersion(1, 1)
+                                 .HasApiVersion(2, 0)
+                                 .Action(c => c.Get1_0()).MapToApiVersion(1, 0)
+                                 .Action(c => c.Get1_1()).MapToApiVersion(1, 1)
+                                 .Action(c => c.Get2_0()).MapToApiVersion(2, 0);
+        });
+        
+  Using Custom Convention
+      
+      options.Conventions.Add(new TestCustomConvention());
+      
+ Using Namespace Convention
+      
+      options.Conventions.Add(new VersionByNamespaceConvention());
