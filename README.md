@@ -1,4 +1,4 @@
-# ApiVersioning_AspNetCore3.1
+# Implementing Api Versioning in Asp.Net Core
 Before starting API development, we should have an API versioning strategy that we are going to implement on our API end points.
 
 When we expose our API for use, it is assumed that we have clearly defined the contracts and that the consumers of our API can rely on these contracts. If we make some changes to our API contracts, these should be exposed as a new version of our API. This new version does not mean a new code base of the API. It should be the same code base that supports different versions of an API.
