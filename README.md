@@ -36,22 +36,48 @@ API Version Reader defines how an API version is read from the HTTP request. If 
 
 
 #### Query String Parameter 
-    services.AddApiVersioning(options => 
-      options.ApiVersionReader = new QueryStringApiVersionReader("v"));
-    
+    services.AddApiVersioning(options=>{
+                  options.AssumeDefaultVersionWhenUnspecified = true;
+                options.DefaultApiVersion = new ApiVersion(1, 0);                
+                options.ReportApiVersions = true; 
+                options.ApiVersionReader= new QueryStringApiVersionReader("v"));
+    });
+   
 #### HTTP Header
-    services.AddApiVersioning(options => 
-      options.ApiVersionReader = new HeaderApiVersionReader("api-version"));
-    
+     services.AddApiVersioning(options=>{
+                  options.AssumeDefaultVersionWhenUnspecified = true;
+                options.DefaultApiVersion = new ApiVersion(1, 0);                
+                options.ReportApiVersions = true; 
+                options.ApiVersionReader= new HeaderApiVersionReader("api-version"));
+    });
+        
 #### Composite Reader
-    services.AddApiVersioning(options => {
-      options.ApiVersionReader = ApiVersionReader.Combine(
-          new QueryStringApiVersionReader("v"),
-          new HeaderApiVersionReader("v"));});
+    services.AddApiVersioning(options=>{
+                  options.AssumeDefaultVersionWhenUnspecified = true;
+                options.DefaultApiVersion = new ApiVersion(1, 0);                
+                options.ReportApiVersions = true; 
+                options.ApiVersionReader= ApiVersionReader.Combine(new QueryStringApiVersionReader("v"),new HeaderApiVersionReader("v"));
+    });
         
 #### URL Path Reader
-     services.AddApiVersioning(options => options.ApiVersionReader = 
-        new UrlSegmentApiVersionReader());
+      services.AddApiVersioning(options=>{
+                  options.AssumeDefaultVersionWhenUnspecified = true;
+                options.DefaultApiVersion = new ApiVersion(1, 0);                
+                options.ReportApiVersions = true; 
+                options.ApiVersionReader= new UrlSegmentApiVersionReader("v"));
+    });
+        
+#### Media Type
+    services.AddApiVersioning(options=>{
+                  options.AssumeDefaultVersionWhenUnspecified = true;
+                options.DefaultApiVersion = new ApiVersion(1, 0);                
+                options.ReportApiVersions = true; 
+                options.ApiVersionReader=new MediaTypeApiVersionReader("v");
+    });
+    
+   In GET Response
+   Set Header:
+   Accept: application/json;v=1.1
     
 * To Set the URL segment of the route where the API version will be read, use [Route("api/v{version:apiVersion}/[controller]")] instead of [Route("api/[controller]")].
 * Use [ApiVersion("1.0")] means it supports Api version 1.0.
